@@ -2,44 +2,26 @@
 from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
-import time
 import math
 import pyautogui
 
 width,height = pyautogui.size()
-len = 0.6
-arrowHeadLen = len*4/5
-arrowHead = 0.04
-angle = 1
-
 
 # Disply callback function
 def display():
     # Reset background
     glClear(GL_COLOR_BUFFER_BIT)
-
     # Render scene
     render_Scene()
-    
-    animation()
-    
     # Swap buffers
-    glutSwapBuffers()
-
-def animation():
-    glRotatef(angle,1,0,0)
-    glRotatef(angle,0,1,0)
-    glRotatef(angle,0,0,1)
-    
-
+    glutSwapBuffers()  
 
 # Scene render function
 def render_Scene():
-    global len 
-    global arrowHeadLen
-    global arrowHead
+    len = 0.7
+    support = 0.6
+    angle = 0.1*math.cos(4)
 
-    glLineWidth(1.5)
     # Draw a Line from the origin to the point (len,0,0)
     glBegin(GL_LINES)
     glColor3f(1,0,0)
@@ -47,26 +29,27 @@ def render_Scene():
     glVertex3f(len, 0,0)
     glEnd()
 
-    # arrow heads of the red line
+    # support lines of the red line
     glBegin(GL_LINES)
     glVertex3f(len, 0,0)
-    glVertex3f(arrowHeadLen, arrowHead,0)
+    glVertex3f(support, angle,0)
     glEnd()
 
     glBegin(GL_LINES)
     glVertex3f(len, 0,0)
-    glVertex3f(arrowHeadLen, -arrowHead,0)
+    glVertex3f(support, -angle,0)
     glEnd()
 
     glBegin(GL_LINES)
     glVertex3f(len, 0,0)
-    glVertex3f(arrowHeadLen, 0,arrowHead)
+    glVertex3f(support, 0,angle)
     glEnd()
 
     glBegin(GL_LINES)
     glVertex3f(len, 0,0)
-    glVertex3f(arrowHeadLen, 0,-arrowHead)
+    glVertex3f(support, 0,-angle)
     glEnd()
+
 
     # Draw a green line
     glBegin(GL_LINES)
@@ -75,28 +58,29 @@ def render_Scene():
     glVertex3f(0, len,0)
     glEnd()
 
-    # arrow heads of the green line
+    # support lines of the green line
     glBegin(GL_LINES)
     glVertex3f(0, len,0)
-    glVertex3f(arrowHead, arrowHeadLen,0)
+    glVertex3f(angle, support,0)
     glEnd()
 
     glBegin(GL_LINES)
     glVertex3f(0, len,0)
-    glVertex3f(-arrowHead, arrowHeadLen,0)
+    glVertex3f(-angle, support,0)
     glEnd()
 
     glBegin(GL_LINES)
     glVertex3f(0, len,0)
-    glVertex3f(0, arrowHeadLen,arrowHead)
+    glVertex3f(0, support,angle)
     glEnd()
 
     glBegin(GL_LINES)
     glVertex3f(0, len,0)
-    glVertex3f(0, arrowHeadLen,-arrowHead)
+    glVertex3f(0, support,-angle)
     glEnd()
 
 
+    
     # Draw a blue line
     glBegin(GL_LINES)
     glColor3f(0,0,1)
@@ -104,25 +88,25 @@ def render_Scene():
     glVertex3f(0, 0,len)
     glEnd()
 
-    # arrow heads of the blue line
+    # support lines of the blue line
     glBegin(GL_LINES)
     glVertex3f(0, 0,len)
-    glVertex3f(arrowHead, 0,arrowHeadLen)
+    glVertex3f(angle, 0,support)
     glEnd()
 
     glBegin(GL_LINES)
     glVertex3f(0, 0,len)
-    glVertex3f(-arrowHead, 0,arrowHeadLen)
+    glVertex3f(-angle, 0,support)
     glEnd()
 
     glBegin(GL_LINES)
     glVertex3f(0, 0,len)
-    glVertex3f(0, arrowHead,arrowHeadLen)
+    glVertex3f(0, angle,support)
     glEnd()
 
     glBegin(GL_LINES)
     glVertex3f(0, 0,len)
-    glVertex3f(0, -arrowHead,arrowHeadLen)
+    glVertex3f(0, -angle,support)
     glEnd()
 
 def reshape(x,y):
@@ -132,13 +116,6 @@ def reshape(x,y):
     gluPerspective(20.0,x/y,4.5,20.0)
     gluLookAt(2,-4,-2,0,0,0,0,1,0)
     glViewport(0,0,x,y)  # Use the whole window for rendering  
-
-
-
-def idle():
-    time.sleep(0.05)
-
-    glutPostRedisplay()
 
 # Initialize GLUT
 glutInit()
@@ -158,9 +135,6 @@ glutCreateWindow("Javid Guliyev and Mahir Israyilov")
 glutDisplayFunc(display)
 
 glutReshapeFunc(reshape)
-
-# Define idle callback
-glutIdleFunc(idle)
 
 # Begin event loop
 glutMainLoop()
