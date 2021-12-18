@@ -41,10 +41,17 @@ glutInit()
 glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH)
 # Set the window size to 500x500 pixels
 glutInitWindowSize(500, 500)
+
+import pyautogui
+width, height = pyautogui.size()
+
+# Set the initial window position to (center, center)
+glutInitWindowPosition ((width -500) // 2, (height-500) // 2)
+
+
 # Create the window and give it a title
 glutCreateWindow("Javid Guliyev and Mahir Israyilov")
-# Set the initial window position to (50, 50)
-glutInitWindowPosition(50, 50)
+
 # Define display callback
 glutDisplayFunc(display)
 # Define idle callback

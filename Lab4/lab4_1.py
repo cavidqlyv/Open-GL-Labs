@@ -5,6 +5,10 @@ from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
 import math
+import pyautogui
+
+width,height = pyautogui.size()
+
 # Disply callback function
 def display():
     # Reset background
@@ -137,12 +141,10 @@ glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
 # Set the window size to 500x500 pixels
 glutInitWindowSize(500, 500)
 
+# Set the initial window position to (center, center)
+glutInitWindowPosition ((width -500) // 2, (height-500) // 2)
 # Create the window and give it a title
 glutCreateWindow("Javid Guliyev and Mahir Israyilov")
-
-# Set the initial window position to (50, 50)
-glutInitWindowPosition(50, 50)
-
 
 # Define callbacks
 glutDisplayFunc(display)
