@@ -1,0 +1,14 @@
+# unvanted files
+/Lorenz
+/Lessons
+/Draft
+
+# videos and zip files
+*.zip
+**/*.avi
+
+
+# images
+# **/*.png
+# **/*.jpg
+# **/*.gif
