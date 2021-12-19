@@ -8,23 +8,29 @@ import time
 
 # Keyboard controls
 
-# F1 exit
+# F1 Control menu
 # F2 Rotation
 # F3 Control light 1
 # F4 Control light 2
 # F5 Control Camera
 
+    # F1 Control menu
+    # F2 Rotation
+    # F3 Control light 1
+    # F4 Control light 2
+    # F5 Control Camera
+    # F6 Scaling
+    # F7 Translate
+    # F8 Shape selection
+print("Welcome \n F1 Control menu,\n F2 Rotation,\n F3 Control light 1,\n F4 Control light 2,\n F5 Control Camera,\n F6 Scaling,\n F7 Translate,\n F8 Shape selection \n F9 Shininess")
 
 
-
-# choise Shape
+# choise of shape
 # "Teapot" , "Cone","Sphere","Cube",
-ShapeType ="Teapot"
+ShapeType = 0
 
+shininessLevel = 50
 
-# animation mode
-# 1 Rotation, 5 Control Light 1, 6 Control Light , 4 Eye ,
-animationMode=5
 
 # eye motion
 eyeX = 0
@@ -33,36 +39,16 @@ eyeZ = 5
 eyeMotionSpeed = 0.1
 
 
-# Keyboard controls
-# Events that measue Button press and release
-keyUp = False
-keyDown = False
-keyRight = False
-keyLeft = False
-keyFront = False
-keyBack = False
-
-func1 = False
-func2 = False
-func3 = False
-func4 = False
-func5 = False
-
-# Count of keys pressed
-KeyPressY = 0
-KeyPressX = 0
-KeyPressZ = 0
 
 
 # Traslation Params
-move = 0.1  # movement speed
-stepsToBorder = 20 # Steps To Border
-moveReset = move*stepsToBorder*2  # This is writen because we assume that the window is Square if not we need to create Up and Right borders seperately
-
+move = 1  # movement speed
+stepsToBorder = 5 # Steps To Border
+moveReset = move*stepsToBorder*2 # reset the move to the border
 translationStep = 0.1
 
-scalingFactor = 200
-shininessLevel = 50
+
+scalingFactor = 1
 
 #Rotation params
 angle = 0 # Roation start angle
@@ -85,6 +71,34 @@ light_diffuse2 = [0.0, 0.0, 1.0, 1.0]
 light_specular2 = [1.0, 1.0, 1.0, 1.0]
 light_posioion2 = [-1.0, 1.0, 1.0, 0.0]
 
+
+# Keyboard controls
+# Events that measue Button press and release
+keyUp = False
+keyDown = False
+keyRight = False
+keyLeft = False
+keyFront = False
+keyBack = False
+
+func1 = False
+func2 = False
+func3 = False
+func4 = False
+func5 = False
+func6 = False
+func7 = False
+func8 = False
+func9 = False
+func10 = False
+
+
+# Count of keys pressed
+KeyPressX = 0
+KeyPressY = 0
+KeyPressZ = 0
+
+
 def background():
     # Set the background color of the window to Gray
     glClearColor(0.5, 0.5, 0.5, 0)
@@ -106,7 +120,6 @@ def lookat():
     glMatrixMode(GL_MODELVIEW)
     glLoadIdentity()
     gluLookAt(eyeX,eyeY,eyeZ,0,0,0,0,1,0)
-
 
 def light1():
 	#Setup light 0 and enable lighting
@@ -147,29 +160,17 @@ def transformations():
     glRotatef(rotZ,0,0,1)
 
 def drawObject():
+    # "Teapot" , "Cone","Sphere","Cube",
     glPushMatrix()
-    if ShapeType == "Cone":
-        glutSolidCone(1,2,50,10 )
-    elif ShapeType == "Sphere":
-        glutSolidSphere(1,50,50)
-    elif ShapeType == "Cube":
-        glutSolidCube(1)
-    elif ShapeType == "Teapot":
+    if ShapeType == 0:
         glutSolidTeapot(1)
+    elif ShapeType == 1:
+        glutSolidCone(1,2,50,10 )
+    elif ShapeType == 2:
+        glutSolidSphere(1,50,50)
+    elif ShapeType == 3:
+        glutSolidCube(1)
     glPopMatrix()   
-    
-def display():
-    background()
-    perspective()
-    lookat()
-    light1()
-    light2()
-    depth()
-    coneMaterial()
-    transformations()
-    drawObject()
-    Scaling()
-    glutSwapBuffers()
 
 def Traslation():
     global KeyPressX
@@ -225,50 +226,53 @@ def Traslation():
     
     # Up Border Collision
     if (KeyPressY > stepsToBorder):  # If the key is pressed more than stepsToBorder times then reset to Bottom
-        keyUpPressTimes = -stepsToBorder
-        keyUpPressed = 0
+        KeyPressY = -stepsToBorder
         print("Collision with Up Border")
-        glTranslatef(0,move*moveReset*keyUpPressTimes-move,0)
+        glTranslatef(0,move*moveReset*KeyPressY-move,0)
 
     # Down Border Collision
     elif (KeyPressY < -stepsToBorder):
-        keyUpPressTimes = stepsToBorder
-        keyUpPressed = 0
-        glTranslatef(0,move*moveReset*keyUpPressTimes+move,0)
+        KeyPressY = stepsToBorder
+        glTranslatef(0,move*moveReset*KeyPressY+move,0)
         print("Collision with Down Border")
 
     # Right Border Collision
     elif (KeyPressX > stepsToBorder):
-        keyRightPressTimes = -stepsToBorder
-        keyRightPressed = 0
-        glTranslatef(move*moveReset*keyRightPressTimes-move,0,0)
+        KeyPressX = -stepsToBorder
+        glTranslatef(move*moveReset*KeyPressX-move,0,0)
         print("Collision with Right Border")
 
     # Left Border Collision
     elif (KeyPressX < -stepsToBorder):
-        keyRightPressTimes = stepsToBorder
-        keyRightPressed = 0
-        glTranslatef(move*moveReset*keyRightPressTimes+move,0,0)
+        KeyPressX = stepsToBorder
+        glTranslatef(move*moveReset*KeyPressX+move,0,0)
         print("Collision with Left Border")
 
     # Front Border Collision
     elif (KeyPressZ > stepsToBorder):
-        keyFrontPressTimes = -stepsToBorder
-        keyFrontPressed = 0
-        glTranslatef(0,0,move*moveReset*keyFrontPressTimes-move)
+        KeyPressZ = -stepsToBorder
+        glTranslatef(0,0,move*moveReset*KeyPressZ-move)
         print("Collision with Front Border")
 
     # Back Border Collision
     elif (KeyPressZ < -stepsToBorder):
-        keyFrontPressTimes = stepsToBorder
-        keyFrontPressed = 0
-        glTranslatef(0,0,move*moveReset*keyFrontPressTimes+move)
+        KeyPressZ = stepsToBorder
+        glTranslatef(0,0,move*moveReset*KeyPressZ+move)
         print("Collision with Back Border")
 
 def Scaling():
+    global keyUp
+    global keyDown
+    global scalingFactor
+    
+    glTranslatef(0,0,0)
+    
+    if keyUp:
+        scalingFactor += 0.05
+    if keyDown:
+        scalingFactor -= 0.05
     glScalef(scalingFactor,scalingFactor,scalingFactor)
     
-
 def Rotation():
     global keyUp
     global keyDown
@@ -350,43 +354,87 @@ def LightPosition(position):
 
     return position
 
+def shining():
+    global keyUp
+    global keyDown
+    global shininessLevel
 
-def idle():
-# F1 exit
-# F2 Rotation
-# F3 Control light 1
-# F4 Control light 2
-# F5 Control Camera
+
+    if keyUp:
+        shininessLevel += 2
+    if keyDown:
+        shininessLevel -= 2
+
+    if (shininessLevel > 100):
+        shininessLevel = 0
+    if (shininessLevel < 0):
+        shininessLevel = 100
+
+def KeyboardNavigation():
+    # F1 Control menu
+    # F2 Rotation
+    # F3 Control light 1
+    # F4 Control light 2
+    # F5 Control Camera
+    # F6 Shape selection
+    # F7 Shining
+
     global light_posioion1
     global light_posioion2
+    global ShapeType
 
     global func1
     global func2
     global func3
     global func4
     global func5
+    global func6
+    global func7
+    global func8
+    global func9
+    global func10
+
     
     if func1:
-        pass
         func1 = False
         func2 = False
         func3 = False
         func4 = False
         func5 = False
+        func6 = False
+        func7 = False
+        func8 = False
+        func9 = False
+        func10 = False
+
     elif func2:
-        print("Rotation")
+        # print("Rotation")
         Rotation()
     elif func3:
-        print("Light 1")
+        # print("Light 1")
         light_posioion1 = LightPosition(light_posioion1)
     elif func4:
-        print("Light 2")
+        # print("Light 2")
         light_posioion2 = LightPosition(light_posioion2)
     elif func5:
-        print("Camera")
+        # print("Camera")
         EyePosition()
-        # Traslation()
-    
+    elif func6:
+        # print("Shape change:")
+        # Select next shape
+        ShapeType = (ShapeType + 1) % 4 
+        func1 = True
+    elif func7:
+        shining()
+    elif func8:
+        pass
+    elif func9:
+        pass
+    elif func10:
+        pass
+
+def idle():
+    KeyboardNavigation()
     time.sleep(sleepTime)
     glutPostRedisplay()
 
@@ -403,9 +451,12 @@ def ProcessSpecialKeys(key,  x,  y):
     global func3
     global func4
     global func5
-
-    print("Key: ", key)
-
+    global func6
+    global func7
+    global func8
+    global func9
+    global func10
+    
     if key == GLUT_KEY_UP:
         keyUp = True
     elif key == GLUT_KEY_DOWN:
@@ -428,9 +479,18 @@ def ProcessSpecialKeys(key,  x,  y):
         func4 = True
     elif key == GLUT_KEY_F5:
         func5 = True
+    elif key == GLUT_KEY_F6:
+        func6 = True
+    elif key == GLUT_KEY_F7:
+        func7 = True
+    elif key == GLUT_KEY_F8:
+        func8 = True
+    elif key == GLUT_KEY_F9:
+        func9 = True
+    elif key == GLUT_KEY_F10:
+        func10 = True
     else:
         print("Unknown key pressed")
-
 
 # Button Release
 def ReleaseSpecialKeys(key,  x,  y):
@@ -459,17 +519,19 @@ def ReleaseSpecialKeys(key,  x,  y):
         keyFront = False
     elif key == GLUT_KEY_PAGE_DOWN:
         keyBack = False
-    # elif key == GLUT_KEY_F1:
-    #     func1 = False
-    # elif key == GLUT_KEY_F2:
-    #     func2 = False
-    # elif key == GLUT_KEY_F3:
-    #     func3 = False
-    # elif key == GLUT_KEY_F4:
-    #     func4 = False
-    # elif key == GLUT_KEY_F5:
-    #     func5 = False
+
     
+def display():
+    background()
+    perspective()
+    lookat()
+    light1()
+    light2()
+    depth()
+    coneMaterial()
+    transformations()
+    drawObject()
+    glutSwapBuffers()
 
 # Initialize GLUT
 glutInit()
