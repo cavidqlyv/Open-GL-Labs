@@ -351,8 +351,6 @@ def LightPosition(position):
     return position
 
 
-
-
 def idle():
 # F1 exit
 # F2 Rotation
@@ -370,13 +368,22 @@ def idle():
     
     if func1:
         pass
+        func1 = False
+        func2 = False
+        func3 = False
+        func4 = False
+        func5 = False
     elif func2:
+        print("Rotation")
         Rotation()
     elif func3:
+        print("Light 1")
         light_posioion1 = LightPosition(light_posioion1)
     elif func4:
+        print("Light 2")
         light_posioion2 = LightPosition(light_posioion2)
     elif func5:
+        print("Camera")
         EyePosition()
         # Traslation()
     
@@ -419,6 +426,8 @@ def ProcessSpecialKeys(key,  x,  y):
         func3 = True
     elif key == GLUT_KEY_F4:
         func4 = True
+    elif key == GLUT_KEY_F5:
+        func5 = True
     else:
         print("Unknown key pressed")
 
@@ -450,16 +459,16 @@ def ReleaseSpecialKeys(key,  x,  y):
         keyFront = False
     elif key == GLUT_KEY_PAGE_DOWN:
         keyBack = False
-    elif key == GLUT_KEY_F1:
-        func1 = False
-    elif key == GLUT_KEY_F2:
-        func2 = False
-    elif key == GLUT_KEY_F3:
-        func3 = False
-    elif key == GLUT_KEY_F4:
-        func4 = False
-    elif key == GLUT_KEY_F5:
-        func5 = False
+    # elif key == GLUT_KEY_F1:
+    #     func1 = False
+    # elif key == GLUT_KEY_F2:
+    #     func2 = False
+    # elif key == GLUT_KEY_F3:
+    #     func3 = False
+    # elif key == GLUT_KEY_F4:
+    #     func4 = False
+    # elif key == GLUT_KEY_F5:
+    #     func5 = False
     
 
 # Initialize GLUT
